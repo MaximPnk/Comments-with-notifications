@@ -13,4 +13,10 @@ public class ExcControllerAdvice {
         AppError appError = new AppError(HttpStatus.SERVICE_UNAVAILABLE.value(), e.getMessage());
         return new ResponseEntity<>(appError, HttpStatus.SERVICE_UNAVAILABLE);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException e) {
+        AppError appError = new AppError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
+        return new ResponseEntity<>(appError, HttpStatus.BAD_REQUEST);
+    }
 }

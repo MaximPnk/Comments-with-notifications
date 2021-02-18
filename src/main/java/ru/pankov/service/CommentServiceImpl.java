@@ -14,6 +14,8 @@ import ru.pankov.err.RandomException;
 import ru.pankov.service.inter.CommentService;
 import ru.pankov.service.inter.NotificationService;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -25,6 +27,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Page<Comment> getComments(Integer page) {
         return commentRepository.findAll(PageRequest.of(page - 1, 10));
+    }
+
+    @Override
+    public Optional<Comment> getComment(Long id) {
+        return commentRepository.findById(id);
     }
 
     @Override

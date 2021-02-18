@@ -6,4 +6,6 @@ import ru.pankov.entity.Notification;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
+
+    Long countAllByDelivered(Boolean delivered);
 }
