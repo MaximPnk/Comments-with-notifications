@@ -1,3 +1,7 @@
+**Запуск:**
+1) Запустить приложение
+2) В Postman использовать указанные endpoint'ы
+
 **Endpoints:**
 
 1) Comments:
@@ -6,7 +10,7 @@
         2) [GET] http://localhost:8189/api/comments?page=1
     2) Add comment:
         1) [POST] http://localhost:8189/api/comments
-            Body: { "text": "Comment text" }
+            Body: My comment
            
 2) Notifications:
     1) Get notifications:

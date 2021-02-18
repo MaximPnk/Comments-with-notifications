@@ -30,9 +30,13 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional
     public Comment addComment(String text) {
+        long start = System.currentTimeMillis();
         Comment comment = commentRepository.save(new Comment(text));
 
         try {
+            // При времени > 1 секунды в методе doSomeWorkOnCommentCreation()
+            // необходимо добавить логику вывода из спяшего состояния из Notification
+            // В данных условиях такой необходимости нет
             BusinessLogic.doSomeWorkOnCommentCreation();
         } catch (RuntimeException e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -41,7 +45,7 @@ public class CommentServiceImpl implements CommentService {
         }
         log.info(String.format("Comment #%d: success", comment.getId()));
 
-        notificationService.addNotification(comment);
+        notificationService.addNotification(comment, System.currentTimeMillis() - start);
         return comment;
     }
 }

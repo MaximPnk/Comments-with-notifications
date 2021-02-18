@@ -26,16 +26,31 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     @Transactional
-    public Notification addNotification(Comment comment) {
+    public void addNotification(Comment comment, Long exec) {
         Notification notification = notificationRepository.save(new Notification(comment));
 
         try {
+            Thread curr = Thread.currentThread();
+            new Thread(() -> {
+                try {
+                    Thread.sleep(1000-exec);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (curr.getState().equals(Thread.State.TIMED_WAITING)) {
+                    log.info("INTERRUPTED");
+                    curr.interrupt();
+                }
+            }).start();
             BusinessLogic.doSomeWorkOnNotification();
         } catch (RuntimeException e) {
             notification.setDelivered(false);
         }
 
+        if (notification.getDelivered() == null) {
+            notification.setDelivered(true);
+        }
+
         log.info(String.format("Notification #%d: " + (notification.getDelivered() ? "success" : "failure"), notification.getId()));
-        return notification;
     }
 }

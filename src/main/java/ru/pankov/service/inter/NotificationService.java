@@ -8,5 +8,5 @@ public interface NotificationService {
 
     Page<Notification> getNotifications(Integer page);
 
-    Notification addNotification(Comment comment);
+    void addNotification(Comment comment, Long exec);
 }
