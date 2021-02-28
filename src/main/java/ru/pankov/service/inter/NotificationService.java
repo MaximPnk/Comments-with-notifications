@@ -4,13 +4,12 @@ import org.springframework.data.domain.Page;
 import ru.pankov.entity.Comment;
 import ru.pankov.entity.Notification;
 
-import java.util.Optional;
+import java.util.concurrent.Future;
 
 public interface NotificationService {
 
     Page<Notification> getNotifications(Integer page);
 
-    Optional<Notification> getNotification(Long id);
+    Future<Notification> addNotification(Comment comment);
 
-    void addNotification(Comment comment, Long exec);
 }

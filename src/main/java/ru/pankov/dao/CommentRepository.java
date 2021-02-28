@@ -6,4 +6,6 @@ import ru.pankov.entity.Comment;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+
+    Comment findByText(String text);
 }

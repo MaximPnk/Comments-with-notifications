@@ -33,5 +33,6 @@ public class Notification {
 
     public Notification(Comment comment) {
         this.comment = comment;
+        this.delivered = true;
     }
 }

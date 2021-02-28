@@ -3,13 +3,11 @@ package ru.pankov.service.inter;
 import org.springframework.data.domain.Page;
 import ru.pankov.entity.Comment;
 
-import java.util.Optional;
+import java.util.concurrent.Future;
 
 public interface CommentService {
 
     Page<Comment> getComments(Integer page);
 
-    Optional<Comment> getComment(Long id);
-
-    Comment addComment(String text);
+    Future<Comment> addComment(String text);
 }
