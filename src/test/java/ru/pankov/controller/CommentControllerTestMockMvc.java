@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -45,6 +46,9 @@ class CommentControllerTestMockMvc {
     @Autowired
     NotificationRepository notificationRepository;
 
+    @Autowired
+    ThreadPoolTaskExecutor executor;
+
     @Before
     public void setup() {
         mock = MockMvcBuilders.webAppContextSetup(context).build();
@@ -52,7 +56,7 @@ class CommentControllerTestMockMvc {
 
     @Test
     void add() throws Exception {
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < count; i++) {
             Comment comment = new Comment("" + i);
             String json = new ObjectMapper().writeValueAsString(comment);
             mock.perform(post("/api/comments")
@@ -61,7 +65,7 @@ class CommentControllerTestMockMvc {
                     .andExpect(status().isOk());
         }
 
-        Thread.sleep(15000);
+        Thread.sleep(20L * count);
 
         log.info(String.format("Success chance of adding a comment = %f", (double) commentRepository.count() / 1000));
         log.info(String.format("Success chance of delivering a notification = %f", (double) notificationRepository.countAllByDelivered(true) / notificationRepository.count()));

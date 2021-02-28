@@ -2,11 +2,13 @@ package ru.pankov.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.pankov.dao.NotificationRepository;
-import ru.pankov.entity.Comment;
 import ru.pankov.entity.Notification;
 import ru.pankov.logic.BusinessLogic;
 import ru.pankov.service.inter.NotificationService;
@@ -27,8 +29,11 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public Future<Notification> addNotification(Comment comment) {
-        Notification notification = notificationRepository.save(new Notification(comment));
+    @Async
+    @EventListener
+    @Transactional
+    public Future<Notification> addNotification(NotificationAddEvent event) {
+        Notification notification = notificationRepository.save(new Notification(event.getComment()));
 
         try {
             BusinessLogic.doSomeWorkOnNotification();

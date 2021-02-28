@@ -2,6 +2,7 @@ package ru.pankov.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Async;
@@ -24,6 +25,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final NotificationService notificationService;
+    private final ApplicationEventPublisher publisher;
 
     @Override
     public Page<Comment> getComments(Integer page) {
@@ -44,7 +46,9 @@ public class CommentServiceImpl implements CommentService {
         }
         log.info(String.format("Comment #%d: success", comment.getId()));
 
-        notificationService.addNotification(comment);
+//        notificationService.addNotification(comment);
+        publisher.publishEvent(new NotificationAddEvent(notificationService, comment));
+
         return CompletableFuture.completedFuture(comment);
     }
 }
