@@ -18,6 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @Slf4j
 class CommentControllerTest {
 
+    //async в тестах
+    //hikari pool
+
+
     int count = 1000;
 
     @Autowired
